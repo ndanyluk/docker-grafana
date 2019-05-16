@@ -39,8 +39,7 @@ COPY tools/phantomjs/render.js ./tools/phantomjs/render.js
 
 EXPOSE 3000
 
-COPY run.sh /run.sh
-
+COPY custom_conf/run.sh                    /run.sh
 COPY custom_conf/docker-entrypoint.sh      /docker-entrypoint.sh
 COPY datasources                           /etc/grafana/provisioning/datasources/
 COPY custom_conf/swarmprom_dashboards.yml  /etc/grafana/provisioning/dashboards/
