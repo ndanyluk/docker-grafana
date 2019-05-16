@@ -46,7 +46,7 @@ install:
 
 script:
   - sudo docker run -d --name grafana ndanyluk/grafana-${target_arch}:$TRAVIS_BUILD_NUMBER
-  - sleep 5
+#  - sleep 5
   - sudo docker ps | grep -q grafana
 
 after_success:
