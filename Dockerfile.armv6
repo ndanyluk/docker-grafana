@@ -1,0 +1,58 @@
+FROM arm32v7/debian:stretch-slim
+
+ARG GF_UID="472"
+ARG GF_GID="472"
+
+ENV PATH=/usr/share/grafana/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+    GF_PATHS_CONFIG="/etc/grafana/grafana.ini" \
+    GF_PATHS_DATA="/var/lib/grafana" \
+    GF_PATHS_HOME="/usr/share/grafana" \
+    GF_PATHS_LOGS="/var/log/grafana" \
+    GF_PATHS_PLUGINS="/var/lib/grafana/plugins" \
+    GF_PATHS_PROVISIONING="/etc/grafana/provisioning"
+
+WORKDIR $GF_PATHS_HOME
+
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get install -qq -y libfontconfig1 ca-certificates && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY conf ./conf
+
+RUN mkdir -p "$GF_PATHS_HOME/.aws" && \
+    groupadd -r -g $GF_GID grafana && \
+    useradd -r -u $GF_UID -g grafana grafana && \
+    mkdir -p "$GF_PATHS_PROVISIONING/datasources" \
+             "$GF_PATHS_PROVISIONING/dashboards" \
+             "$GF_PATHS_PROVISIONING/notifiers" \
+             "$GF_PATHS_LOGS" \
+             "$GF_PATHS_PLUGINS" \
+             "$GF_PATHS_DATA" && \
+    cp "$GF_PATHS_HOME/conf/sample.ini" "$GF_PATHS_CONFIG" && \
+    cp "$GF_PATHS_HOME/conf/ldap.toml" /etc/grafana/ldap.toml && \
+    chown -R grafana:grafana "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS" "$GF_PATHS_PROVISIONING" && \
+    chmod 777 -R "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS" "$GF_PATHS_PROVISIONING"
+
+COPY bin/grafana-server_armv6 ./bin/
+COPY bin/grafana-cli_armv6 ./bin/
+COPY public ./public
+COPY tools ./tools
+COPY tools/phantomjs/render.js ./tools/phantomjs/render.js
+
+EXPOSE 3000
+
+COPY run.sh /run.sh
+
+COPY custom_conf/docker-entrypoint.sh      /docker-entrypoint.sh
+COPY datasources                           /etc/grafana/provisioning/datasources/
+COPY custom_conf/swarmprom_dashboards.yml  /etc/grafana/provisioning/dashboards/
+COPY dashboards                            /etc/grafana/dashboards/
+
+USER root
+
+ENV GF_SECURITY_ADMIN_PASSWORD=admin \
+    GF_SECURITY_ADMIN_USER=admin \
+    GF_PATHS_PROVISIONING=/etc/grafana/provisioning/
+
+ENTRYPOINT [ "/docker-entrypoint.sh" ]
