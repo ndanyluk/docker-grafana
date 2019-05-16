@@ -54,7 +54,7 @@ after_success:
       echo "PR build, skipping Docker Hub push";
     else
       docker login -u "$DOCKER_USER" -p "$DOCKER_PASS";
-      docker tag ndanyluk/grafana-${target_arch}:$TRAVIS_BUILD_NUMBER ndanyluk/grafana-${target_arch}:${target_version}-test;#
+      docker tag ndanyluk/grafana-${target_arch}:$TRAVIS_BUILD_NUMBER ndanyluk/grafana-${target_arch}:${target_version}-test;
       docker tag ndanyluk/grafana-${target_arch}:$TRAVIS_BUILD_NUMBER ndanyluk/grafana-${target_arch}:latest;
       docker push ndanyluk/grafana-${target_arch}:${target_version}-test;
       docker push ndanyluk/grafana-${target_arch}:latest;
