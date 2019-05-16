@@ -42,11 +42,12 @@ install:
   - rm -rf grafana-${target_version}
   - rm grafana-${target_version}.${target_platform}-${target_arch}.tar.gz
   - curl -sLO https://raw.githubusercontent.com/grafana/grafana/v${target_version}/packaging/docker/run.sh
+  - chmod +x run.sh
   - docker build -f Dockerfile.${target_arch} -t ndanyluk/grafana-${target_arch}:$TRAVIS_BUILD_NUMBER .
 
 script:
   - sudo docker run -d --name grafana ndanyluk/grafana-${target_arch}:$TRAVIS_BUILD_NUMBER
-#  - sleep 5
+  - sleep 5
   - sudo docker ps | grep -q grafana
 
 after_success:
