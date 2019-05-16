@@ -1,4 +1,6 @@
-FROM arm32v7/debian:stretch-slim
+FROM arm32v5/debian:stretch-slim
+
+COPY qemu-arm-static /usr/bin
 
 ARG GF_UID="472"
 ARG GF_GID="472"
