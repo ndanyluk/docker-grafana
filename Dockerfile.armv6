@@ -1,4 +1,4 @@
-FROM arm32v5/debian:stretch-slim
+FROM arm32v6/alpine:3.9.4
 
 COPY qemu-arm-static /usr/bin
 
@@ -14,11 +14,6 @@ ENV PATH=/usr/share/grafana/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bi
     GF_PATHS_PROVISIONING="/etc/grafana/provisioning"
 
 WORKDIR $GF_PATHS_HOME
-
-RUN apt-get update && apt-get upgrade -y && \
-    apt-get install -qq -y libfontconfig1 ca-certificates && \
-    apt-get autoremove -y && \
-    rm -rf /var/lib/apt/lists/*
 
 COPY conf ./conf
 
