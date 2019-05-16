@@ -19,7 +19,7 @@ COPY conf ./conf
 
 RUN mkdir -p "$GF_PATHS_HOME/.aws" && \
     addgroup -S -g $GF_GID grafana && \
-    useradd -S -u $GF_UID -G grafana grafana && \
+    adduser -S -u $GF_UID -G grafana grafana && \
     mkdir -p "$GF_PATHS_PROVISIONING/datasources" \
              "$GF_PATHS_PROVISIONING/dashboards" \
              "$GF_PATHS_PROVISIONING/notifiers" \
