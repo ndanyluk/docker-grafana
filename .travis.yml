@@ -28,8 +28,11 @@ install:
   - docker run --rm --privileged multiarch/qemu-user-static:register
   - curl -sLO https://github.com/multiarch/qemu-user-static/releases/download/v${qemu_version}/qemu-${qemu_arch}-static.tar.gz;
   - tar -xzvf qemu-${qemu_arch}-static.tar.gz;
+  - ls
   - curl -sLO https://dl.grafana.com/oss/release/grafana-${target_version}.${target_platform}-${target_arch}.tar.gz
   - curl -sS https://grafana.com/grafana/download?platform=${bin_platform} | grep -oP "Standalone Linux Binaries.*${bin_arch}.*SHA256.*>\K.*" | sed "$ s/$/  grafana-${target_version}.${target_platform}-${target_arch}.tar.gz/" > sha256sums.txt
+  - ls
+  - cat sha256sums.txt
   - if [ ! -z "$(sha256sum -c sha256sums.txt 2> /dev/null | grep OK)" ]; then
       tar -xzvf grafana-${target_version}.${target_platform}-${target_arch}.tar.gz;
       cp grafana-${target_version}/bin/grafana-server ./bin/grafana-server_${target_arch};
@@ -39,9 +42,12 @@ install:
       cp -r grafana-${target_version}/conf .;
       cp -r grafana-${target_version}/scripts .;
     fi;
+  - ls
   - rm -rf grafana-${target_version}
   - rm grafana-${target_version}.${target_platform}-${target_arch}.tar.gz
+  - ls
   - curl -sLO https://raw.githubusercontent.com/grafana/grafana/v${target_version}/packaging/docker/run.sh
+  - ls
   - docker build -f Dockerfile.${target_arch} -t ndanyluk/grafana-${target_arch}:$TRAVIS_BUILD_NUMBER .
 
 script:
