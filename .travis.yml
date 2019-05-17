@@ -13,7 +13,7 @@ env:
   matrix:
     - target_arch=amd64 qemu_arch=x86_64 bin_arch="64 Bit" bin_platform=linux
     - target_arch=armv7 qemu_arch=arm bin_arch=ARMv7 bin_platform=arm
-    - target_arch=armv6 qemu_arch=arm bin_arch=ARMv6 bin_platform=arm
+#    - target_arch=armv6 qemu_arch=arm bin_arch=ARMv6 bin_platform=arm
     - target_arch=arm64 qemu_arch=aarch64 bin_arch=ARM64 bin_platform=arm
 
 before_install:
