@@ -21,6 +21,10 @@ before_install:
   - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
   - sudo apt-get update
   - sudo apt-get -y install docker-ce
+  - mkdir $HOME/.docker
+  - 'echo "{" > $HOME/.docker/config.json'
+  - 'echo "  \"experimental\": \"enabled\"" >> $HOME/.docker/config.json'
+  - 'echo "}" >> $HOME/.docker/config.json'
   - sudo service docker restart
   - mkdir bin
 
@@ -62,3 +66,21 @@ after_success:
       docker push ndanyluk/grafana-${target_arch}:${target_version};
       docker push ndanyluk/grafana-${target_arch}:latest;
     fi
+
+jobs:
+  include:
+    - stage: deploy
+      install: skip
+      script: skip
+      after_success:
+        - if [ -z "$DOCKER_USER" ]; then
+            echo "PR build, skipping Docker Hub push";
+          elif [ "$TRAVIS_BRANCH" != "master" ]; then
+            echo "Branch build, skipping Docker Hub push";
+          else
+            docker login -u "$DOCKER_USER" -p "$DOCKER_PASS";
+            docker manifest create ndanyluk/grafana:${target_version} ndanyluk/grafana-armv7:${target_version} ndanyluk/grafana-arm64:${target_version} ndanyluk/grafana-amd64:${target_version}
+            docker manifest create ndanyluk/grafana:latest ndanyluk/grafana-armv7:latest ndanyluk/grafana-amd64:latest ndanyluk/grafana-arm64:latest
+            docker manifest push ndanyluk/grafana:${target_version};
+            docker manifest push ndanyluk/grafana:latest;
+          fi
