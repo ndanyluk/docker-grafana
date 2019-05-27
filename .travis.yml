@@ -79,8 +79,8 @@ jobs:
             echo "Branch build, skipping Docker Hub push";
           else
             docker login -u "$DOCKER_USER" -p "$DOCKER_PASS";
-            docker manifest create ndanyluk/grafana:${target_version} ndanyluk/grafana-armv7:${target_version} ndanyluk/grafana-arm64:${target_version} ndanyluk/grafana-amd64:${target_version}
-            docker manifest create ndanyluk/grafana:latest ndanyluk/grafana-armv7:latest ndanyluk/grafana-amd64:latest ndanyluk/grafana-arm64:latest
+            docker manifest create ndanyluk/grafana:${target_version} ndanyluk/grafana-armv7:${target_version} ndanyluk/grafana-arm64:${target_version} ndanyluk/grafana-amd64:${target_version};
+            docker manifest create ndanyluk/grafana:latest ndanyluk/grafana-armv7:latest ndanyluk/grafana-amd64:latest ndanyluk/grafana-arm64:latest;
             docker manifest push ndanyluk/grafana:${target_version};
             docker manifest push ndanyluk/grafana:latest;
           fi
