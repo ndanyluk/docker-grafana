@@ -39,7 +39,6 @@ install:
       cp grafana-${target_version}/bin/grafana-server ./bin/grafana-server_${target_arch};
       cp grafana-${target_version}/bin/grafana-cli ./bin/grafana-cli_${target_arch};
       cp -r grafana-${target_version}/public .;
-      cp -r grafana-${target_version}/tools .;
       cp -r grafana-${target_version}/conf .;
       cp -r grafana-${target_version}/scripts .;
     fi;
