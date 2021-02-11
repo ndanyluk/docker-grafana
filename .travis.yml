@@ -7,8 +7,8 @@ services:
 
 env:
   global:
-    - qemu_version=5.1.0-7
-    - target_version=7.3.4
+    - qemu_version=5.2.0-2
+    - target_version=7.4.1
     - target_platform=linux
   matrix:
     - target_arch=amd64 qemu_arch=x86_64 bin_arch="64 Bit" bin_platform=linux
